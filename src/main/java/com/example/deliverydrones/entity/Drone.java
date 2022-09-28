@@ -2,19 +2,35 @@ package com.example.deliverydrones.entity;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.validator.constraints.Length;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @Setter
 @Getter
-@Table(name = "drones")
 @Entity
 public class Drone extends BaseEntity {
-    @Column(name = "serial_number", unique = true, length = 100, nullable = false)
+
+    @NotNull
+    @Column(unique = true, length = 100)
     private String serialNumber;
 
-    @Column(name = "battery_capacity", precision = 100, scale = 2)
-    private double batteryCapacity;
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    private DroneModel model;
+
+    @Column(precision = 5, scale = 2)
+    private long weightLimit;
+
+    @Column(precision = 5, scale = 2)
+    private int batteryCapacity;
+
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    private DroneState state;
+
+    @OneToMany
+    private List<Medication> medication;
 }
