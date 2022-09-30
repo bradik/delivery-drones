@@ -1,5 +1,7 @@
 package com.example.deliverydrones.dto;
 
+import com.example.deliverydrones.entity.DroneModel;
+import com.example.deliverydrones.entity.DroneState;
 import lombok.*;
 
 
@@ -10,8 +12,13 @@ import lombok.*;
 @NoArgsConstructor
 public class DroneDto {
 
-    private Long id;
-
     private String serialNumber;
 
+    private DroneModel model;
+
+    private long weightLimit;
+
+    private int batteryCapacity;
+
+    private DroneState state;
 }

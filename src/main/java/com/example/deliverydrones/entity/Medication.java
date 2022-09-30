@@ -5,14 +5,17 @@ import lombok.Setter;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.Lob;
+import javax.persistence.Index;
+import javax.persistence.Table;
 
 @Setter
 @Getter
 @Entity
+@Table(indexes = @Index(columnList ="name, weight"))
 public class Medication extends BaseEntity {
 
     //TODO name (allowed only letters, numbers, ‘-‘, ‘_’);
+
     @Column(nullable = false)
     private String name;
 
@@ -23,8 +26,7 @@ public class Medication extends BaseEntity {
     @Column(nullable = false)
     private String code;
 
-    @Lob
-    private byte[] image;
+    private String imageUrl;
 
 }
 

@@ -26,4 +26,10 @@ public class JsonUtils {
         }
         return result;
     }
+
+    @SneakyThrows
+    public static <T> T jsonToObject(String json, Class<T> tClass) {
+
+        return CONFIGURED_MAPPER.readValue(json, tClass);
+    }
 }

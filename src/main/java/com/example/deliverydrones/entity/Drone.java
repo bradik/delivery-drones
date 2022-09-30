@@ -2,11 +2,12 @@ package com.example.deliverydrones.entity;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.validator.constraints.Length;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.validation.constraints.NotNull;
-import java.util.List;
 
 @Setter
 @Getter
@@ -31,6 +32,4 @@ public class Drone extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private DroneState state;
 
-    @OneToMany
-    private List<Medication> medication;
 }

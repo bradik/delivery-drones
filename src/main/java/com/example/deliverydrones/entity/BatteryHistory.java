@@ -5,19 +5,18 @@ import lombok.Setter;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
-import javax.persistence.ManyToOne;
-import java.sql.Date;
+import javax.persistence.*;
+import java.util.Date;
+
 
 @Setter
 @Getter
-@EntityListeners(AuditingEntityListener.class)
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 public class BatteryHistory extends BaseEntity {
 
     @UpdateTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
     private Date auditTime;
 
     @ManyToOne
@@ -27,3 +26,4 @@ public class BatteryHistory extends BaseEntity {
     private int batteryLevel;
 
 }
+

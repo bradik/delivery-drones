@@ -20,4 +20,9 @@ spring:
       ddl-auto: update
   sql:
     init:
-      mode: EMBEDDED
+      mode: ALWAYS
+
+app:
+  battery:
+    check:
+      schedule: 0/5 * * * * ?
