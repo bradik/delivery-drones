@@ -7,7 +7,7 @@ spring:
     #url: jdbc:h2:./h2/droneDb;DB_CLOSE_ON_EXIT=FALSE;AUTO_SERVER=TRUE
     driver-class-name: org.h2.Driver
     username: sa
-    password: 123
+    password:
   h2:
     console:
       path: /h2
