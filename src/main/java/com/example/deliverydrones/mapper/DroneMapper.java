@@ -13,6 +13,7 @@ public interface DroneMapper {
 
     DroneDto toDto(Drone entity);
 
+    @Mapping(target = "currentFlight", ignore = true)
     Drone toEntity(DroneDto dto);
 
     List<DroneDto> toEntities(List<Drone> all);
