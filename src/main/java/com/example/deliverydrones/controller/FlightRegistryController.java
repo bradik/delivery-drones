@@ -19,21 +19,23 @@ public class FlightRegistryController {
 
     private final FlightRegistryService flightRegistryService;
 
-    @PostMapping("/register/{serialNumber}")
-    public ResponseEntity<FlightRegistryDto> registerFlight(@PathVariable String serialNumber, @RequestBody(required = false) List<MedicationItemDto> dtos) {
+    @PostMapping("/register/drone/{serialNumber}")
+    public ResponseEntity<FlightRegistryDto> registerFlight(
+            @PathVariable String serialNumber, @RequestBody(required = false) List<MedicationItemDto> dtos) {
         FlightRegistryDto flightRegistryDto = flightRegistryService.registerFlight(serialNumber, dtos);
         return ResponseEntity.ok(flightRegistryDto);
     }
 
-    @PostMapping("/medication/add/{flightId}")
-    public ResponseEntity<FlightRegistryDto> addMedicationToFlight(@PathVariable Long flightId, @RequestBody(required = false) List<MedicationItemDto> dtos) {
-        FlightRegistryDto flightRegistryDto = flightRegistryService.addMedicationToFlight(flightId, dtos);
+    @PostMapping("/medication/add/drone/{serialNumber}")
+    public ResponseEntity<FlightRegistryDto> addMedicationToFlight(
+            @PathVariable String serialNumber, @RequestBody(required = false) List<MedicationItemDto> dtos) {
+        FlightRegistryDto flightRegistryDto = flightRegistryService.addMedicationToFlight(serialNumber, dtos);
         return ResponseEntity.ok(flightRegistryDto);
     }
 
-    @GetMapping("/drone/{serialNumber}")
-    public ResponseEntity<FlightRegistryDto> findLastByDrone(@PathVariable String serialNumber) {
-        FlightRegistryDto flightRegistryDto = flightRegistryService.findLastByDrone(serialNumber);
-        return ResponseEntity.ok(flightRegistryDto);
+    @GetMapping("/medication/drone/{serialNumber}")
+    public ResponseEntity<List<MedicationItemDto>> getMedicationItemsBySerialNumber(@PathVariable String serialNumber) {
+        List<MedicationItemDto> medicationItemDtos = flightRegistryService.getMedicationItemsBySerialNumber(serialNumber);
+        return ResponseEntity.ok(medicationItemDtos);
     }
 }

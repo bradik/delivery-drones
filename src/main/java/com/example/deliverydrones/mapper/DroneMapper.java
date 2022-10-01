@@ -16,10 +16,4 @@ public interface DroneMapper {
     Drone toEntity(DroneDto dto);
 
     List<DroneDto> toEntities(List<Drone> all);
-
-    @Mapping(target = "model", ignore = true)
-    @Mapping(target = "weightLimit", ignore = true)
-    @Mapping(target = "serialNumber", ignore = true)
-    void updateEntity(@MappingTarget Drone entity, DroneDto dto);
-
 }

@@ -1,6 +1,7 @@
 package com.example.deliverydrones.dto;
 
 import com.example.deliverydrones.entity.Drone;
+import com.example.deliverydrones.entity.FlightState;
 import lombok.*;
 
 import java.sql.Date;
@@ -13,15 +14,15 @@ import java.util.List;
 @NoArgsConstructor
 public class FlightRegistryDto {
 
-    private Long id;
-
     private Date registrationTime;
 
     private Date deliveryTime;
 
-    private Drone drone;
+    private DroneDto drone;
 
     private List<MedicationItemDto> medicationItems;
 
     private Long totalWeight;
+
+    private FlightState state;
 }

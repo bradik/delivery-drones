@@ -9,7 +9,7 @@ public interface DroneService {
 
     List<DroneDto> getAvailableDronesForLoading(int pageNumber, int pageSize);
 
-    Boolean registerDrone(DroneDto droneDto);
+    DroneDto registerDrone(DroneDto droneDto);
 
     DroneDto getDroneBySerialNumber(String serialNumber);
 

@@ -2,10 +2,7 @@ package com.example.deliverydrones.service.impl;
 
 import com.example.deliverydrones.dto.FlightRegistryDto;
 import com.example.deliverydrones.dto.MedicationItemDto;
-import com.example.deliverydrones.entity.Drone;
-import com.example.deliverydrones.entity.FlightRegistry;
-import com.example.deliverydrones.entity.FlightState;
-import com.example.deliverydrones.entity.MedicationItem;
+import com.example.deliverydrones.entity.*;
 import com.example.deliverydrones.error.DroneException;
 import com.example.deliverydrones.error.ErrorCode;
 import com.example.deliverydrones.mapper.FlightRegistryMapper;
@@ -14,6 +11,7 @@ import com.example.deliverydrones.repository.DroneRepository;
 import com.example.deliverydrones.repository.FlightRegistryRepository;
 import com.example.deliverydrones.service.FlightRegistryService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -32,6 +30,9 @@ public class FlightRegistryServiceImpl implements FlightRegistryService {
     private final DroneRepository droneRepository;
     private final FlightRegistryRepository flightRegistryRepository;
 
+    @Value("${app.battery.percentage.min}")
+    private int minBatteryCapacity;
+
     @Override
     public FlightRegistryDto registerFlight(String serialNumber) {
         return registerFlight(serialNumber, null);
@@ -43,23 +44,38 @@ public class FlightRegistryServiceImpl implements FlightRegistryService {
         Drone drone = droneRepository.findBySerialNumber(serialNumber)
                 .orElseThrow(() -> DroneException.of(ErrorCode.DR_01));
 
+        if (drone.getCurrentFlight() != null) {
+            throw DroneException.of(ErrorCode.FRS_01);
+        }
+
+        if (drone.getBatteryCapacity() < minBatteryCapacity) {
+            throw DroneException.of(ErrorCode.FRS_04);
+        }
 
         FlightRegistry registryEntity = new FlightRegistry();
         registryEntity.setDrone(drone);
-        registryEntity.setStatus(FlightState.NEW);
+        registryEntity.setState(FlightState.LOADING);
 
         addMedicationToFlight(registryEntity, dtos);
 
         registryEntity = flightRegistryRepository.save(registryEntity);
 
+        drone.setCurrentFlight(registryEntity);
+        drone.setState(DroneState.LOADING);
+
+        droneRepository.save(drone);
+
         return flightRegistryMapper.toDto(registryEntity);
     }
 
     @Override
-    public FlightRegistryDto addMedicationToFlight(long idFlight, List<MedicationItemDto> dtos) {
+    public FlightRegistryDto addMedicationToFlight(String serialNumber, List<MedicationItemDto> dtos) {
 
-        FlightRegistry registryEntity = flightRegistryRepository.findById(idFlight)
-                .orElseThrow(() -> DroneException.of(ErrorCode.FRS_02));
+        FlightRegistry registryEntity = flightRegistryRepository.findFlightRegistryByDroneSerialNumber(serialNumber);
+
+        if (registryEntity == null) {
+            throw DroneException.of(ErrorCode.FRS_02);
+        }
 
         addMedicationToFlight(registryEntity, dtos);
 
@@ -71,14 +87,14 @@ public class FlightRegistryServiceImpl implements FlightRegistryService {
     }
 
     @Override
-    public FlightRegistryDto findLastByDrone(String serialNumber) {
+    public List<MedicationItemDto> getMedicationItemsBySerialNumber(String serialNumber) {
 
-        Drone drone = droneRepository.findBySerialNumber(serialNumber)
-                .orElseThrow(() -> DroneException.of(ErrorCode.DR_01));
+        FlightRegistry flightRegistry = flightRegistryRepository.findFlightRegistryByDroneSerialNumber(serialNumber);
+        if (flightRegistry == null) {
+            throw DroneException.of(ErrorCode.FRS_02);
+        }
 
-        FlightRegistry flightRegistry = flightRegistryRepository.findFirstByDroneAndStatusOrderByIdDesc(drone, FlightState.NEW);
-
-        return flightRegistryMapper.toDto(flightRegistry);
+        return medicationItemMaper.toDtos(flightRegistry.getMedicationItems());
     }
 
     private void addMedicationToFlight(FlightRegistry registryEntity, List<MedicationItemDto> newDtos) {

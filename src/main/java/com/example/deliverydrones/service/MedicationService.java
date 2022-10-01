@@ -8,4 +8,5 @@ public interface MedicationService {
 
     List<MedicationDto> getAllMedication(int pageNumber, int pageSize);
 
+    MedicationDto registerMedication(MedicationDto dto);
 }

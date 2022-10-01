@@ -15,6 +15,8 @@ import javax.validation.constraints.Min;
 @NoArgsConstructor
 public class DroneDto {
 
+    private Long id;
+
     private String serialNumber;
 
     private DroneModel model;
@@ -26,4 +28,5 @@ public class DroneDto {
     private int batteryCapacity;
 
     private DroneState state;
+
 }

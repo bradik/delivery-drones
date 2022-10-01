@@ -1,14 +1,13 @@
 package com.example.deliverydrones.controller;
 
+import com.example.deliverydrones.dto.DroneDto;
 import com.example.deliverydrones.dto.MedicationDto;
 import com.example.deliverydrones.service.MedicationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 import static com.example.deliverydrones.util.Constants.API;
@@ -21,6 +20,14 @@ public class MedicationController {
 
     private final MedicationService medicationService;
 
+    @PostMapping
+    public ResponseEntity<MedicationDto> registerMedication(@Valid @RequestBody MedicationDto dto) {
+
+        MedicationDto result = medicationService.registerMedication(dto);
+
+        return ResponseEntity.ok(result);
+    }
+
     @GetMapping("/all")
     public ResponseEntity<List<MedicationDto>> getAllMedications(
             @RequestParam(required = false, name = "pageNumber", defaultValue = "1") Integer pageNumber,
@@ -30,4 +37,5 @@ public class MedicationController {
 
         return ResponseEntity.ok(allMedication);
     }
+
 }

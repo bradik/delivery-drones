@@ -11,7 +11,7 @@ public interface FlightRegistryService {
 
     FlightRegistryDto registerFlight(String serialNumber, List<MedicationItemDto> dto);
 
-    FlightRegistryDto addMedicationToFlight(long idFlight, List<MedicationItemDto> dto);
+    FlightRegistryDto addMedicationToFlight(String serialNumber, List<MedicationItemDto> dto);
 
-    FlightRegistryDto findLastByDrone(String serialNumber);
+    List<MedicationItemDto> getMedicationItemsBySerialNumber(String serialNumber);
 }

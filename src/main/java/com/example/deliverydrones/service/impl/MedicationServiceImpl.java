@@ -1,6 +1,7 @@
 package com.example.deliverydrones.service.impl;
 
 import com.example.deliverydrones.dto.MedicationDto;
+import com.example.deliverydrones.entity.Medication;
 import com.example.deliverydrones.mapper.MedicationMaper;
 import com.example.deliverydrones.repository.MedicationRepository;
 import com.example.deliverydrones.service.MedicationService;
@@ -20,6 +21,14 @@ public class MedicationServiceImpl implements MedicationService {
     private final MedicationRepository medicationRepository;
 
     private final MedicationMaper medicationMaper;
+
+    @Override
+    public MedicationDto registerMedication(MedicationDto dto) {
+
+        Medication entity = medicationRepository.save(medicationMaper.toEntity(dto));
+
+        return medicationMaper.toDto(entity);
+    }
 
     @Override
     public List<MedicationDto> getAllMedication(int pageNumber, int pageSize) {

@@ -3,10 +3,9 @@ package com.example.deliverydrones.entity;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
+import javax.persistence.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 @Setter
@@ -31,5 +30,9 @@ public class Drone extends BaseEntity {
     @NotNull
     @Enumerated(EnumType.STRING)
     private DroneState state;
+
+    @OneToOne
+    @JoinColumn(name = "current_flight_id")
+    private FlightRegistry currentFlight;
 
 }

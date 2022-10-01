@@ -9,6 +9,7 @@ import com.example.deliverydrones.mapper.DroneMapper;
 import com.example.deliverydrones.repository.DroneRepository;
 import com.example.deliverydrones.service.DroneService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -24,6 +25,9 @@ public class DroneServiceImpl implements DroneService {
     private final DroneRepository droneRepository;
     private final DroneMapper droneMapper;
 
+    @Value("${app.battery.percentage.min}")
+    private int minBatteryCapacity;
+
     @Override
     public List<DroneDto> getAllDrones() {
 
@@ -32,27 +36,16 @@ public class DroneServiceImpl implements DroneService {
 
     @Override
     public DroneDto getDroneBySerialNumber(String serialNumber) {
+
         Drone drone = droneRepository.findBySerialNumber(serialNumber).orElseThrow(() -> DroneException.of(ErrorCode.DR_01));
         return droneMapper.toDto(drone);
     }
 
     @Override
-    public Boolean registerDrone(DroneDto dto) {
+    public DroneDto registerDrone(DroneDto dto) {
 
-        droneRepository.findBySerialNumber(dto.getSerialNumber())
-                .ifPresentOrElse(
-                        entity -> {
-
-                            droneMapper.updateEntity(entity, dto);
-
-                            droneRepository.save(entity);
-                        },
-                        () -> {
-                            Drone entity = droneMapper.toEntity(dto);
-                            droneRepository.save(entity);
-                        });
-
-        return true;
+        Drone entity = droneRepository.save(droneMapper.toEntity(dto));
+        return droneMapper.toDto(entity);
     }
 
     @Override
@@ -60,7 +53,10 @@ public class DroneServiceImpl implements DroneService {
 
         Pageable pageable = PageRequest.of(pageNumber - 1, pageSize, Sort.by(Sort.Order.by("id").ignoreCase()));
 
-        List<Drone> drones = droneRepository.findAllByState(DroneState.IDLE, pageable);
+        List<Drone> drones = droneRepository.findAllByState(DroneState.IDLE, pageable)
+                .stream()
+                .filter(drone -> drone.getBatteryCapacity() > minBatteryCapacity)
+                .collect(Collectors.toList());
 
         return drones
                 .stream()

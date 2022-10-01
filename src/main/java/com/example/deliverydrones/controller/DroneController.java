@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 import static com.example.deliverydrones.util.Constants.API;
@@ -19,9 +20,9 @@ public class DroneController {
     private final DroneService droneService;
 
     @PostMapping
-    public ResponseEntity<Boolean> registerDrone(@RequestBody DroneDto dto) {
+    public ResponseEntity<DroneDto> registerDrone(@Valid @RequestBody DroneDto dto) {
 
-        Boolean result = droneService.registerDrone(dto);
+        DroneDto result = droneService.registerDrone(dto);
 
         return ResponseEntity.ok(result);
     }

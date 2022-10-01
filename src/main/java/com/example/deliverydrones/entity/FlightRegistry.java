@@ -33,6 +33,5 @@ public class FlightRegistry extends BaseEntity {
     private Long totalWeight;
 
     @Enumerated(EnumType.STRING)
-    private FlightState status;
-
+    private FlightState state;
 }

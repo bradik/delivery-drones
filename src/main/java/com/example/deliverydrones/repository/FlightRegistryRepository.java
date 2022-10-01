@@ -6,5 +6,5 @@ import com.example.deliverydrones.entity.FlightState;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface FlightRegistryRepository extends JpaRepository<FlightRegistry, Long> {
-    FlightRegistry findFirstByDroneAndStatusOrderByIdDesc(Drone drone, FlightState state);
+    FlightRegistry findFlightRegistryByDroneSerialNumber(String serialNumber);
 }
