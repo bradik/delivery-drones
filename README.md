@@ -40,10 +40,22 @@ useIntegrationTests=false
 
 ## Database
 
-http://localhost:8080/h2 URL through you can access the console of H2 database.
-Please see the application.properties file for getting database configuration values
+URL through you can access the console of H2 database: 
+
+http://localhost:8080/delivery-drones/h2
+
+Please see the [application.yaml](application.yaml) file for getting database configuration values
 ```shell
 JDBC URL: jdbc:h2:mem:droneDb
 username: sa
 no password required
 ```
+
+#API documentation
+***The Swagger UI page will then be available at*** 
+
+http://localhost:8080/delivery-drones/swagger-ui.html 
+
+And the OpenAPI description will be available at the following url for json format: 
+
+http://localhost:8080/delivery-drones/v3/api-docs
