@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class Constants {
     public static final String API = "/api/v1/";
-    public static final String DRONES = "drones";
-    public static final String MEDICATIONS = "medications";
-    public static final String FLIGHTS = "flights";
+    public static final String DRONES = "drone";
+    public static final String MEDICATIONS = "medication";
+    public static final String FLIGHTS = "flight";
 }
