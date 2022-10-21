@@ -30,7 +30,7 @@ class DroneControllerIntegrationTest {
     private MockMvc mockMvc;
 
     @Test
-    void registerFlight() throws Exception {
+    void registerDrone() throws Exception {
 
         String serialNumber = "MQ198GT";
         DroneDto droneDto = DroneDto.builder()

@@ -34,4 +34,11 @@ public class FlightRegistry extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     private FlightState state;
+
+    @PreUpdate
+    public void onPreUpdate() {
+        if (state == FlightState.DELIVERED) {
+            deliveryTime = new Date();
+        }
+    }
 }

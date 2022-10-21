@@ -44,7 +44,7 @@ URL through you can access the console of H2 database:
 
 http://localhost:8080/delivery-drones/h2
 
-Please see the [application.yaml](application.yaml) file for getting database configuration values
+Please see the [application.yaml](src/main/resources/application.yaml) file for getting database configuration values
 ```shell
 JDBC URL: jdbc:h2:mem:droneDb
 username: sa
@@ -59,3 +59,57 @@ http://localhost:8080/delivery-drones/swagger-ui.html
 And the OpenAPI description will be available at the following url for json format: 
 
 http://localhost:8080/delivery-drones/v3/api-docs
+
+
+#Work algorithm:
+
+Registering a new drone
+```
+post /api/v1/drone
+```
+
+Or get drones available for download
+```
+get /api/v1/drone/availableForLoading
+```
+
+Registering a new kind of medication
+```
+post /api/v1/medication
+```
+
+Or get all registered medications
+```
+get /api/v1/medication/all
+```
+
+Register a new drone flight
+
+Pass the medication in the body of the request (optional) 
+```
+post /api/v1/flight/register/drone/{serialNumber}
+```
+
+Adding new medication to the drone flight
+```
+post /api/v1/flight/medication/add/drone/{serialNumber}
+```
+
+Checking the medications registered on the drone flight
+```
+get /api/v1/flight/medication/drone/{serialNumber}
+```
+
+Battery value can be seen by calling
+```
+get /api/v1/drone/battery/{serialNumber}
+```
+###Note
+Each drone can only have one current flight.
+If the drone changes its status to IDLE, the current flight is closed.
+
+(`controller level implementation not done`)
+
+**see:** FlightRegistryControllerIntegrationTest#registerForManyFlight
+
+Don't forget to turn on integration tests, see **Run Integration Tests**

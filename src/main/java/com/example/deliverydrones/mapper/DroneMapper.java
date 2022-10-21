@@ -16,5 +16,11 @@ public interface DroneMapper {
     @Mapping(target = "currentFlight", ignore = true)
     Drone toEntity(DroneDto dto);
 
+    @Mapping(target = "model", ignore = true)
+    @Mapping(target = "weightLimit", ignore = true)
+    @Mapping(target = "serialNumber", ignore = true)
+    @Mapping(target = "currentFlight", ignore = true)
+    void updateEntity(@MappingTarget Drone entity, DroneDto dto);
+
     List<DroneDto> toEntities(List<Drone> all);
 }
